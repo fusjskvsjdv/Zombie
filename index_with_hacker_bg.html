@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CODEX TEAM - Free Fire Items</title>
+<style>
+/* خلفية الهاكر المتحركة */
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Canvas للخلفية المتحركة */
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.8;
+}
+
+/* تأثير الضوء الأخضر */
+.glow {
+    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+}
+
+/* تصميم الصفحة الأساسي */
+.container {
+    position: relative;
+    z-index: 10;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+}
+
+header h1 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00;
+    animation: pulse 2s infinite;
+}
+
+.E-letter {
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* تصميم النموذج */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    color: #00ff00;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="number"] {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 12px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: #00ff00;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    background: rgba(0, 50, 0, 0.3);
+}
+
+.item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 50, 0, 0.1);
+    border-radius: 5px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.item-row input[type="number"] {
+    flex: 1;
+}
+
+/* تصميم المفاتيح */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 25px;
+    background: #333;
+    border: 2px solid #00ff00;
+    border-radius: 25px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.toggle::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 19px;
+    height: 19px;
+    background: #00ff00;
+    border-radius: 50%;
+    transition: 0.3s;
+    z-index: 1;
+    box-shadow: 0 0 10px #00ff00;
+}
+
+.toggle input:checked + .toggle::before {
+    transform: translateX(25px);
+}
+
+.toggle input:checked + .toggle::after {
+    background: rgba(0, 255, 0, 0.2);
+}
+
+/* زر الإرسال */
+button[type="submit"] {
+    background: linear-gradient(45deg, #00ff00, #00cc00);
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(45deg, #00cc00, #00ff00);
+    box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+/* القائمة الجانبية */
+.menu-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5em;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.menu-btn:hover {
+    background: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    border-left: 2px solid #00ff00;
+    transition: right 0.3s ease;
+    z-index: 1001;
+    padding: 20px;
+}
+
+.sidebar.open {
+    right: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    color: #00ff00;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #00ff00;
+    font-size: 2em;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar-links a {
+    color: #00ff00;
+    text-decoration: none;
+    padding: 12px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.sidebar-links a:hover {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: #00ff00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* تأثيرات إضافية */
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.container {
+    animation: flicker 3s infinite;
+}
+
+/* تجاوب مع الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    header h1 {
+        font-size: 2em;
+    }
+    
+    .sidebar {
+        width: 250px;
+        right: -250px;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Canvas للخلفية المتحركة -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- زر القائمة + الشريط الجانبي -->
+<button id="menu-btn" class="menu-btn" aria-label="فتح القائمة" title="القائمة">⋮</button>
+<aside id="sidebar" class="sidebar" aria-label="قائمة الموقع" tabindex="-1">
+  <div class="sidebar-header">
+    <span>القائمة</span>
+    <button id="close-sidebar" class="close-btn" aria-label="إغلاق">×</button>
+  </div>
+  <nav class="sidebar-links">
+    <a href="/">إرسال العناصر (الرئيسية)</a>
+    <a href="/long_bio">إنشاء Long Bio</a>
+    <a href="/uid_login">UID & Password → JWT</a>
+    <a href="/access_login">Access Token → JWT</a>
+  </nav>
+</aside>
+<div id="backdrop" class="backdrop" tabindex="-1" aria-hidden="true"></div>
+
+<div>
+    <header>
+        <h1 class="glow">ZOMBI<span class="E-letter">E</span> TEAM</h1>
+    </header>
+
+    <div class="container" role="region" aria-label="نموذج إرسال العناصر">
+        <form id="ff-form" method="POST" novalidate>
+            <label for="jwt_token">توكن الحساب:</label>
+            <input id="jwt_token" type="text" name="jwt_token" required placeholder="أدخل التوكن الخاص بك" autocomplete="off" inputmode="text">
+
+            
+            <div class="item-row">
+                <input type="number" name="item1" placeholder="ID العنصر 1" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 1">
+                    <input type="checkbox" name="enable1" checked aria-label="تفعيل عنصر 1">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item2" placeholder="ID العنصر 2" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 2">
+                    <input type="checkbox" name="enable2" checked aria-label="تفعيل عنصر 2">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item3" placeholder="ID العنصر 3" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 3">
+                    <input type="checkbox" name="enable3" checked aria-label="تفعيل عنصر 3">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item4" placeholder="ID العنصر 4" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 4">
+                    <input type="checkbox" name="enable4" checked aria-label="تفعيل عنصر 4">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item5" placeholder="ID العنصر 5" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 5">
+                    <input type="checkbox" name="enable5" checked aria-label="تفعيل عنصر 5">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item6" placeholder="ID العنصر 6" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 6">
+                    <input type="checkbox" name="enable6" checked aria-label="تفعيل عنصر 6">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item7" placeholder="ID العنصر 7" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 7">
+                    <input type="checkbox" name="enable7" checked aria-label="تفعيل عنصر 7">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item8" placeholder="ID العنصر 8" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 8">
+                    <input type="checkbox" name="enable8" checked aria-label="تفعيل عنصر 8">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item9" placeholder="ID العنصر 9" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 9">
+                    <input type="checkbox" name="enable9" checked aria-label="تفعيل عنصر 9">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item10" placeholder="ID العنصر 10" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 10">
+                    <input type="checkbox" name="enable10" checked aria-label="تفعيل عنصر 10">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item11" placeholder="ID العنصر 11" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 11">
+                    <input type="checkbox" name="enable11" checked aria-label="تفعيل عنصر 11">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item12" placeholder="ID العنصر 12" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 12">
+                    <input type="checkbox" name="enable12" checked aria-label="تفعيل عنصر 12">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item13" placeholder="ID العنصر 13" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 13">
+                    <input type="checkbox" name="enable13" checked aria-label="تفعيل عنصر 13">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item14" placeholder="ID العنصر 14" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 14">
+                    <input type="checkbox" name="enable14" checked aria-label="تفعيل عنصر 14">
+                </label>
+            </div>
+            
+            <div class="item-row">
+                <input type="number" name="item15" placeholder="ID العنصر 15" inputmode="numeric">
+                <label class="toggle" title="تفعيل/تعطيل العنصر 15">
+                    <input type="checkbox" name="enable15" checked aria-label="تفعيل عنصر 15">
+                </label>
+            </div>
+            
+
+            <button type="submit" id="submit-btn">إرسال</button>
+        </form>
+
+        
+    </div>
+</div>
+
+<script>
+// خلفية الهاكر المتحركة - Matrix Effect
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+
+// تحديد حجم Canvas
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// إعدادات Matrix
+const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+const matrixArray = matrix.split("");
+
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+for (let x = 0; x < columns; x++) {
+    drops[x] = 1;
+}
+
+// رسم Matrix
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = '#00FF00';
+    ctx.font = fontSize + 'px monospace';
+    
+    for (let i = 0; i < drops.length; i++) {
+        const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
+}
+
+// تشغيل الرسوم المتحركة
+setInterval(drawMatrix, 35);
+
+// وظائف القائمة الجانبية
+const menuBtn = document.getElementById('menu-btn');
+const sidebar = document.getElementById('sidebar');
+const closeSidebar = document.getElementById('close-sidebar');
+const backdrop = document.getElementById('backdrop');
+
+function openSidebar() {
+    sidebar.classList.add('open');
+    backdrop.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSidebarFunc() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+menuBtn.addEventListener('click', openSidebar);
+closeSidebar.addEventListener('click', closeSidebarFunc);
+backdrop.addEventListener('click', closeSidebarFunc);
+
+// إغلاق القائمة بمفتاح Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebarFunc();
+    }
+});
+
+// تأثيرات إضافية للنموذج
+const form = document.getElementById('ff-form');
+const submitBtn = document.getElementById('submit-btn');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // تأثير الإرسال
+    submitBtn.style.background = 'linear-gradient(45deg, #ff0000, #ff4444)';
+    submitBtn.textContent = 'جاري الإرسال...';
+    
+    setTimeout(() => {
+        submitBtn.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
+        submitBtn.textContent = 'تم الإرسال!';
+        
+        setTimeout(() => {
+            submitBtn.textContent = 'إرسال';
+        }, 2000);
+    }, 1500);
+});
+
+// تأثيرات الكتابة
+const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+        this.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.6)';
+    });
+    
+    input.addEventListener('blur', function() {
+        this.style.boxShadow = '0 0 15px rgba(0, 255, 0, 0.5)';
+    });
+    
+    input.addEventListener('input', function() {
+        if (this.value) {
+            this.style.color = '#00ff00';
+            this.style.textShadow = '0 0 5px #00ff00';
+        }
+    });
+});
+
+// تأثير الطباعة للعنوان
+const title = document.querySelector('header h1');
+const originalText = title.textContent;
+title.textContent = '';
+
+let i = 0;
+function typeWriter() {
+    if (i < originalText.length) {
+        title.textContent += originalText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 150);
+    }
+}
+
+// بدء تأثير الطباعة بعد تحميل الصفحة
+window.addEventListener('load', function() {
+    setTimeout(typeWriter, 1000);
+});
+
+// تأثيرات الماوس
+document.addEventListener('mousemove', function(e) {
+    const cursor = document.createElement('div');
+    cursor.style.position = 'fixed';
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    cursor.style.width = '3px';
+    cursor.style.height = '3px';
+    cursor.style.background = '#00ff00';
+    cursor.style.borderRadius = '50%';
+    cursor.style.pointerEvents = 'none';
+    cursor.style.zIndex = '9999';
+    cursor.style.boxShadow = '0 0 10px #00ff00';
+    
+    document.body.appendChild(cursor);
+    
+    setTimeout(() => {
+        cursor.remove();
+    }, 500);
+});
+</script>
+</body>
+</html>
